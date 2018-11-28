@@ -1,0 +1,54 @@
+LifeLines Source Release, Version 3.1.1
+http://marcno.github.io/lifelines/
+-------------------------------------------------------------------------
+
+This is a high-level view of changes made to the source tree.
+For details on files changed and the changes themselves, consult the git
+commit logs.
+
+XXXX-YY-ZZ Matt Emmerton
+
+	Release 3.1.2 (under development)
+
+	Improve curses detection to ensure that we can detect environments
+	  without wide character support.
+	
+2016-03-16 Matt Emmerton
+
+	Release 3.1.1
+
+	Fix breakage during docs/manual build.
+	Fix breakage during reports install.
+
+2016-03-14 Matt Emmerton
+
+	Release 3.1.0
+
+2016-03-14 Matt Emmerton
+
+	More improvements to build/release tools, mainly to handle version number bumps.
+	Update docbook toolchain and update to docbook 4.5
+
+2015-12-22 Matt Emmerton
+
+        Improve build/release tools.
+
+2015-12-09 Matt Emmerton
+
+	Purge reference to sourceforge; use new github URLs for web site and development
+	Consolidate and reorganize version-related code.  Version is now provided by
+	configure.ac, not version.h
+
+2015-11-16 Matt Emmerton
+
+	Remove web content from distribution; now lives separately in gh-pages branch
+
+2015-11-16 Matt Emmerton
+
+	Update autoconf/automake to avoid warnings.
+	Remove lingering CVS tags from all files.
+	Reorganize documentation into docs/dev, docs/man and docs/manual.
+
+2015-09-28 Matt Emmerton
+
+	Fix long-standing UTF-8 bug
