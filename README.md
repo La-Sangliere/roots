@@ -1,6 +1,8 @@
 # roots
+
 A command line genealogy program forked from Tom Wetmore's LifeLines
-(recently upgraded to v3.1.1 -- cf. branch `up-lifelines`)
+
+(Upgraded to **v3.1.1** -- cf. branch `up-lifelines`)
 
 LifeLines is actively maintained, so why fork? There are several reasons to this:
 
