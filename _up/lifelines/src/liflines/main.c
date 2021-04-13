@@ -326,7 +326,7 @@ prompt_for_db:
 		if (!init_screen(errmsg, sizeof(errmsg)/sizeof(errmsg[0])))
 		{
 			endwin();
-			fprintf(stderr, "%s", errmsg);
+			fprintf(stderr, errmsg);
 			goto finish;
 		}
 		set_screen_graphical(graphical);

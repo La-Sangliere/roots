@@ -322,7 +322,6 @@ llrpt_name (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
-	/* NOTE: the 68 here is arbitrary */
 	outname = manip_name(nval(name), captype, REGORDER, 68);
 	return create_pvalue_from_string(outname);
 }
@@ -342,7 +341,7 @@ llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	STRING outname=0;
 
 	indi = eval_indi(argvar, stab, eflg, NULL);
-	if (*eflg) {
+	if (*eflg || !indi) {
 		*eflg = TRUE;
 		prog_var_error(node, stab, argvar, NULL, nonindx, "fullname", "1");
 		return NULL;
@@ -371,13 +370,6 @@ llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	}
 	len = pvalue_to_int(val);
 	delete_pvalue_ptr(&val);
-
-	/* invalid indi (eg, fullname(husb(fam)) when fam has no husb) */
-        if (!indi) {
-		return create_pvalue_from_string(0);
-        }
-
-	/* indi without a name (eg, HUSB/WIFE/CHIL node without a NAME record, or an empty NAME record */
 	if (!(name = NAME(indi)) || !nval(name)) {
 		if (getlloptint("RequireNames", 0)) {
 			*eflg = TRUE;
@@ -386,8 +378,6 @@ llrpt_fullname (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 		}
 		return create_pvalue_from_string(0);
 	}
-
-	/* indi with a name record, or a permitted empty record (via RequireNames=0) */
 	outname = manip_name(nval(name), caps, regorder, len);
 	return create_pvalue_from_string(outname);
 }
@@ -1183,7 +1173,7 @@ llrpt_ord (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (i > 12)
 		sprintf(scratch, _("%ldth"), i);
 	else
-		sprintf(scratch, "%s", _(ordinals[i - 1]));
+		sprintf(scratch, _(ordinals[i - 1]));
 	return create_pvalue_from_string(scratch);
 }
 /*==================================================+
@@ -1211,7 +1201,7 @@ llrpt_card (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	if (i < 0 || i > 12)
 		sprintf(scratch, "%ld", i);
 	else
-		sprintf(scratch, "%s", _(cardinals[i]));
+		sprintf(scratch, _(cardinals[i]));
 	return create_pvalue_from_string(scratch);
 }
 /*==========================================+
@@ -2755,7 +2745,7 @@ llrpt_jd2date (PNODE node, SYMTAB stab, BOOLEAN *eflg)
 	} else {
 		mo = (INT)(e - 13);
 	}
-	if (mo > 2) {
+	if (mo >= 2) {
 		yr = (INT)(c - 4716);
 	} else {
 		yr = (INT)(c - 4715);

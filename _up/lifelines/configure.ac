@@ -4,7 +4,7 @@ dnl
 dnl Process this file with autoconf to produce a configure script.
 
 dnl **************************************************************
-dnl Autoconf Section
+dnl Autoconf Preamble
 dnl **************************************************************
 
 AC_INIT(lifelines, 3.1.1)
@@ -13,28 +13,14 @@ AC_REVISION([for lifelines, built with autoconf] AC_ACVERSION)
 AC_CONFIG_AUX_DIR(build/autotools)
 AC_CANONICAL_HOST
 
-dnl **************************************************************
-dnl Automake Section
-dnl **************************************************************
-
 dnl Use 'foreign' to avoid requiring GNU files in top-level.
 AM_INIT_AUTOMAKE([foreign])
+
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
 dnl **************************************************************
-dnl Gettext Section
-dnl **************************************************************
-
-dnl Internationalization (gettext)
-AM_GNU_GETTEXT([external],[need-ngettext])
-AM_GNU_GETTEXT_VERSION([0.11.5])
-
-dnl codeset conversion library
-AM_ICONV
-
-dnl **************************************************************
-dnl Compile-Chain Section
+dnl Check for Compile-Chain Programs
 dnl **************************************************************
 
 dnl Checks for programs.
@@ -53,14 +39,38 @@ then
 fi
 
 dnl **************************************************************
-dnl OS/Compiler-Specific Section
+dnl Check for Internationalization Support (gettext and iconv)
+dnl **************************************************************
+
+dnl Internationalization (gettext)
+dnl ALL_LINGUAS is not needed with latest autotools
+dnl but debian maintainer still needs it
+dnl These languages should be a copy of po/LINGUAS
+ALL_LINGUAS="da de el eo es fr it nl pl rw sv"
+AM_GNU_GETTEXT(,need-ngettext)
+
+dnl codeset conversion library
+AM_ICONV
+
+dnl **************************************************************
+dnl Apply OS/Compiler-Specific Settings
 dnl **************************************************************
 
 dnl Add warning flags when using The GNU C Compiler
 if test "${ac_cv_prog_gcc}" = "yes"; then
-  CFLAGS="${CFLAGS} -W -Wall"
-  CFLAGS="${CFLAGS} -Wcast-align -Wmissing-declarations -Wmissing-prototypes"
-  CFLAGS="${CFLAGS} -Wreturn-type -Wstrict-prototypes -pedantic"
+  # -ansi breaks compile of liflines/askprogram.c [pere 2000-12-31]
+  for flag in \
+        -W \
+        -Wall \
+        -Wcast-align \
+        -Wmissing-declarations \
+        -Wmissing-prototypes \
+        -Wreturn-type \
+        -Wstrict-prototypes \
+        -pedantic
+  do
+    JAPHAR_GREP_CFLAGS($flag,    [ CFLAGS="$CFLAGS $flag"    ])
+  done
 
   dnl Add debugging as well
   CFLAGS="${CFLAGS} -g"
@@ -139,68 +149,50 @@ echo Looking for header files
 AC_CHECK_HEADERS( getopt.h dirent.h pwd.h locale.h windows.h )
 AC_CHECK_HEADERS( wchar.h wctype.h )
 AC_CHECK_HEADERS( math.h )
+AC_CHECK_HEADERS( ncurses/curses.h ncursesw/curses.h )
 
 echo Looking for library functions
 AC_CHECK_FUNCS( _vsnprintf heapwalk _heapwalk getpwuid setlocale )
-AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha )
-AC_SEARCH_LIBS( sin, m )
-AC_SEARCH_LIBS( cos, m )
-AC_SEARCH_LIBS( tan, m )
-AC_SEARCH_LIBS( asin, m )
-AC_SEARCH_LIBS( acos, m )
-AC_SEARCH_LIBS( atan, m )
+AC_CHECK_FUNCS( wcscoll towlower towupper iswspace iswalpha)
+AC_CHECK_LIB( m, sin )
+AC_CHECK_LIB( m, cos )
+AC_CHECK_LIB( m, tan )
+AC_CHECK_LIB( m, asin )
+AC_CHECK_LIB( m, acos )
+AC_CHECK_LIB( m, atan )
+
+echo Looking for curses-compatible screen output library
+AC_CHECK_LIB(ncursesw, tparm)
+if test "$ac_cv_lib_ncursesw_tparm" = "yes"; then
+  echo Using ncursesw
+else
+AC_CHECK_LIB(ncurses, tparm)
+if test "$ac_cv_lib_ncurses_tparm" = "yes"; then
+  echo Using ncurses
+else
+  echo Looking for curses
+  AC_CHECK_LIB(curses, main)
+  if test "$ac_cv_lib_curses_main" = "yes"; then
+    echo Using curses
+  else
+    case $host in
+      *mingw32*)
+        echo "Didn't find an up-to-date ncurses or curses library!"
+        echo "Using LifeLines version of curses for Windows."
+      ;;
+      *)
+        echo "Didn't find an up-to-date ncurses or curses library!"
+        echo "Link problems may result!"
+      ;;
+    esac
+  fi
+fi
+fi
 
 dnl Check for replacement functions
 AC_REPLACE_FUNCS( sleep scandir alphasort getopt snprintf vsnprintf )
 AC_REPLACE_FUNCS( nl_langinfo wcslen has_key )
 AC_REPLACE_FUNCS( _llnull )
-
-dnl **************************************************************
-dnl Check for curses
-dnl **************************************************************
-
-dnl Since some distributions package wide and narrow functions
-dnl in separate libraries, we need to check for them separately.
-dnl We also need to search for a wide character routine, so that
-dnl we can warn if only a narrow version of curses is found.
-dnl
-dnl We search for libraries first, since its easier to tell if
-dnl the right libraries are installed than the right headers.
-
-echo Looking for curses libraries
-AC_CHECK_LIB(ncursesw, in_wch)
-if test "$ac_cv_lib_ncursesw_in_wch" = "yes"; then
-  echo Using ncursesw
-else
-  AC_CHECK_LIB(ncurses, in_wch)
-  if test "$ac_cv_lib_ncurses_in_wch" = "yes"; then
-    echo Using ncurses
-  else
-    AC_CHECK_LIB(cursesw, in_wch)
-    if test "$ac_cv_lib_cursesw_in_wch" = "yes"; then
-      echo Using cursesw
-    else
-      AC_CHECK_LIB(curses, in_wch)
-      if test "$ac_cv_lib_curses_in_wch" = "yes"; then
-        echo Using curses
-      else
-        case $host in
-          *mingw32*)
-            echo "Using LifeLines version of curses for Windows."
-          ;;
-          *)
-            echo "LifeLines requires a curses implementation with wide character support!"
-            exit
-          ;;
-        esac
-      fi
-    fi
-  fi
-fi
-
-dnl Check for headers
-echo Looking for curses headers
-AC_CHECK_HEADERS( ncursesw/curses.h ncurses/curses.h curses.h )
 
 dnl **************************************************************
 dnl Platform/Version-Specific Checks
@@ -224,6 +216,20 @@ case $host in
     ;;
 esac
 
+dnl ngettext function missing from 0.10.35
+echo Looking for ngettext
+saved_libs="$LIBS"
+LIBS="$LIBS $LIBINTL"
+AC_TRY_LINK([#include <libintl.h>], [ngettext("","",0);],
+    ac_cv_func_ngettext=yes, ac_cv_func_ngettext=no)
+  if test "$ac_cv_func_ngettext" = yes; then
+    echo "found ngettext"
+    AC_DEFINE(HAVE_NGETTEXT, 1, [Define if you have the ngettext() function.])
+  else
+    echo "couldn't find ngettext"
+    LIBS="$saved_libs"
+  fi
+
 case $host_os in
   *windows*)
     AC_DEFINE(LINES_CONFIG_FILE,"lines.cfg",[lifelines configuration file])
@@ -232,6 +238,35 @@ case $host_os in
     AC_DEFINE(LINES_CONFIG_FILE,".linesrc",[lifelines configuration file])
     ;;
 esac
+
+dnl bind_textdomain_codeset function missing from 0.10.35
+echo Looking for bind_textdomain_codeset
+saved_libs="$LIBS"
+LIBS="$LIBS $LIBINTL"
+AC_TRY_LINK([#include <libintl.h>], [bind_textdomain_codeset("","");],
+    ac_cv_func_bind_textdomain_codeset=yes, ac_cv_func_bind_textdomain_codeset=no)
+  if test "$ac_cv_func_bind_textdomain_codeset" = yes; then
+    echo "found bind_textdomain_codeset"
+    AC_DEFINE(HAVE_BIND_TEXTDOMAIN_CODESET, 1, [Define if you have the bind_textdomain_codeset() function.])
+  else
+    echo "couldn't find bind_textdomain_codeset"
+    LIBS="$saved_libs"
+  fi
+
+dnl **************************************************************
+dnl Backwards-compatibility hacks for older autoconf (pre-2.60)
+dnl 1) datadir is obsolete and has been replaced by datarootdir.
+dnl 2) localedir is new, was previously set based on datadir
+dnl
+dnl We set these up here to avoid warnings from newer tools.
+dnl All Makefile.am files have been updated to use the new vars.
+dnl **************************************************************
+if test -z $datarootdir; then
+  datarootdir=$datadir
+fi
+if test -z $localedir; then
+  localedir=$datarootdir/locale
+fi
 
 dnl **************************************************************
 dnl Build Makefiles
@@ -262,4 +297,5 @@ AC_OUTPUT(Makefile \
         reports/st/Makefile \
         tt/Makefile \
         build/Makefile \
+        intl/Makefile \
         po/Makefile.in)

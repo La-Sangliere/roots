@@ -33,17 +33,19 @@ llexec_LDADD = ../interp/libinterp.a ../gedlib/libgedcom.a \
 	@LIBINTL@ @LIBICONV@
 
 # $(top_builddir)        for config.h
+# $(top_srcdir)/intl     for intl headers
+# $(top_builddir)/intl   for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
 
-AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/src/hdrs
+AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
 # Locale information for gettext
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 
 EXTRA_DIST = llinesi.h screeni.h
 
-# these dependencies are so that building parts ('make llines' or 'make
-# llexec') will work
+# these dependencies are so that building parts ('make btedit' or 'make
+# lines') will work
 
 ../btree/libbtree.a :
 	$(MAKE) -C ../btree libbtree.a

@@ -1,7 +1,9 @@
-<book xmlns="http://docbook.org/ns/docbook" version="5.0" xml:id="docbook"
-      xmlns:xi="http://www.w3.org/2001/XInclude">
+<?xml version='1.0' encoding='iso-8859-1'?>
 
-<info>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+                 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"
+[<!ENTITY llversion '3.1.1'>]>
+
 <!--
 Outline for developer's guide to lifelines code.
 This is only an outline, not a parseable XML file.
@@ -223,11 +225,13 @@ TODO:
 <!-- ================================================= -->
 <!-- ChangeLog                                         -->
 <!-- ================================================= -->
-<!-- 
-    Samuel Leathers <disasm@gmail.com> 12-Jun-2017
-    - Converted to docbook 5
+<!--
                                                        -->
 <!-- ================================================= -->
+
+<book id="docbook">
+
+<bookinfo>
 
 <title>
 
@@ -235,11 +239,13 @@ TODO:
 </title>
 
     <authorgroup>
-      <author><personname><firstname>Perry</firstname><surname>Rapp </surname></personname></author>
+      <author>
+      <firstname>Perry</firstname><surname>Rapp </surname>
+      </author>
     </authorgroup>
 
-    <subtitle><application>LifeLines</application> Version <xi:include href="version" parse="text" /></subtitle>
-  </info>
+    <subtitle><application>LifeLines</application> Version &llversion;</subtitle>
+  </bookinfo>
 
 
 
@@ -341,7 +347,7 @@ The stdlib directory contains various utility functions not specifically
 related to <application>LifeLines</application>, GEDCOM, or even genealogy.
 </para>
 
-<section>
+<sect1>
 <title>String Functions</title>
 
 <para>
@@ -350,7 +356,7 @@ split currently between mystring.c and stdstrng.c (and a few macros in
 standard.h).
 </para>
 
-<section>
+<sect2>
 <title>String copy and concatenation</title>
 
 <funcsynopsis><funcprototype>
@@ -377,9 +383,9 @@ standard.h).
     are UTF-8 aware (they backtrack on overflow, to avoid leaving part of
     a UTF-8 multibyte sequence at the end).
 </para>
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>String append (llstrapp)</title>
 
 <para>
@@ -435,9 +441,9 @@ standard.h).
       llstrappf(buffer, sizeof(buffer), ...
     </programlisting>
 </para>
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>String append (appendstr)</title>
 <para>
     This is a family of functions similar in purpose to the strapp 
@@ -450,9 +456,9 @@ standard.h).
       less intuitive than the strapp family, and more bug-prone. They are
       slightly faster, but I don't think it is worth it. -Perry. 
 </para>
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>char functions</title>
 <para>
     There are character classification functions, which have handling
@@ -467,56 +473,56 @@ standard.h).
       Latin-1 and Finnish specific character code.
 </para>
 
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>string allocation functions</title>
 <para>
     TODO: (strsave, strfree, strupdate, strconcat, free_array_strings)
 </para>
 
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>string conversion functions</title>
 <para>
     TODO: (isnumeric, lower, upper, capitalize, titlecase)
 </para>
 
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>string equality functions</title>
 <para>
     TODO: (eqstr, eqstr_ex, nestr, cmpstr)
 </para>
 
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>string comparison functions</title>
 <para>
     TODO: (cmpstrloc)
 </para>
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>string whitespace functions</title>
 <para>
     TODO: (trim, striptrail, striplead, allwhite, chomp)
 </para>
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>string UTF-8 functions</title>
 <para>
     These are the low-level functions used to do UTF-8 mechanics.
     These should only be called when in a database with internal
     codeset of UTF-8.
 </para>
-</section>
+</sect2>
 
-<section>
+<sect2>
 <title>printpic functions</title>
 <para>
     These are simple printf style functions, except they only handle
@@ -527,10 +533,10 @@ standard.h).
     escapes.
 </para>
 
-</section>
-</section>
+</sect2>
+</sect1>
 
-<section>
+<sect1>
 <title>List Module</title>
 
 <para>
@@ -542,9 +548,9 @@ list type LISTDOFREE), and of course this only works if they are
 stdalloc/stdfree heap blocks.
 </para>
 
-</section>
+</sect1>
 
-<section>
+<sect1>
 <title>Table Module</title>
 
 <para>
@@ -553,9 +559,9 @@ As of 2005-01, Perry has been changing the implementation of the table
 type, so it is currently in flux.
 </para>
 
-</section>
+</sect1>
 
-<section>
+<sect1>
 <title>Balanced Binary Tree (rbtree) Module</title>
 
 <para>
@@ -564,7 +570,7 @@ These are not currently used by lifelines, but are planned as a replacement
 for the current fixed-size hash table in table.c.
 </para>
 
-</section>
+</sect1>
 
 </chapter>
 
@@ -575,23 +581,23 @@ This directory is a collection of routines for GEDCOM and for its use in
 a <application>LifeLines</application> btree database.
 </para>
 
-<section>
+<sect1>
 <title>names</title>
   <para>
   This module implements indexing names.
   TODO: Explain soundex indexing.
 </para>
 
-</section>
-<section>
+</sect1>
+<sect1>
 <title>refns</title>
 <para>
   This module implements indexing references (REFNs).
   TOD: Explain two character index.
 </para>
 
-</section>
-<section>
+</sect1>
+<sect1>
 <title>xreffile</title>
 <para>
   This module stores lists of deleted record numbers for each type.
@@ -601,8 +607,8 @@ a <application>LifeLines</application> btree database.
   number.
 </para>
 
-</section>
-<section>
+</sect1>
+<sect1>
 <title>messages</title>
 <para>
   Traditionally all translatable strings have been stored in this file.
@@ -617,8 +623,8 @@ a <application>LifeLines</application> btree database.
     to be worked out.
 </para>
 
-</section>
-<section>
+</sect1>
+<sect1>
 <title>translation tables (charmaps.c and translat.c)</title>
 <para>
   The implementation of codeset translation is stored here (not to be 
@@ -628,22 +634,22 @@ a <application>LifeLines</application> btree database.
   library are done here.
 </para>
 
-</section>
-<section>
+</sect1>
+<sect1>
 <title>indiseq</title>
 <para>
   The indiseq type is implemented here, a list of records (which no longer
   need all be persons).
 </para>
 
-</section>
-<section>
+</sect1>
+<sect1>
 <title>brwslist</title>
 <para>
   Named browse lists are implemented here (temporary record lists named by
   user during this session).
 </para>
-</section>
+</sect1>
 
 </chapter>
 
@@ -679,22 +685,22 @@ for that file (in the main parsing loop in the main interpreter
 function), require conditions are tested in check_rpt_requires(...).
 </para>
 
-<section>
+<sect1>
 <title>pvalues</title>
 <para>
   All variable values in report language interpretation are stored in a
   union type called pvalue.
 </para>
-</section>
+</sect1>
 
-<section>
+<sect1>
 <title>symtab</title>
 <para>
   Symbol tables are a thin wrapper around the table type provided by
   stdlib, specialized to hold pvalues.
 </para>
-</section>
-<section>
+</sect1>
+<sect1>
 <title>date</title>
 <para>
   A fairly complete GEDCOM date parser is also located here. It actually
@@ -711,7 +717,7 @@ function), require conditions are tested in check_rpt_requires(...).
     exposed to the rest of the program (gdate and gdate_val, which correspond
     to GEDCOM date types), but not to the report language.
 </para>
-</section>
+</sect1>
 
 </chapter>
 
@@ -739,7 +745,7 @@ This section does not assume you are downloading the source tarball
 and building it, Those instructions are in the file INSTALL.
 We are assuming you are checking out the sources from CVS.
 </para>
-<section>
+<sect1>
 <title>Cloning the source tree</title>
 <para>
 Anyone can clone the 
@@ -769,8 +775,8 @@ git commit                  # to commit changes
 git push                    # to push files to remote repository
 </programlisting>
 </para>
-</section>
-<section>
+</sect1>
+<sect1>
 <title>automake and autoconf</title>
 <para>
 Many of the files you're used to editing by hand are automatically
@@ -808,9 +814,9 @@ autogen.sh does the following:
 * Calls automake to generate Makefile.in files from Makefile.am
 * Calls autoconf to generate configure from configure.ac
 </para>
-</section>
+</sect1>
 
-<section>
+<sect1>
 <title>configure</title>
 <para>
 From a source distribution package, or a regenerated development environment,
@@ -818,9 +824,9 @@ the 'configure' script will generate config.h and generate Makefiles from
 every Makefile.in.  At this point your source tree is properly configured
 for your machine and can be built.
 </para>
-</section>
+</sect1>
 
-<section>
+<sect1>
 <title>Building the code on Unix/Linux</title>
 <para>
 There are lots of dependencies required to build
@@ -848,8 +854,8 @@ This should build
 <application>LifeLines</application>
 and leave the results in subdirectories of the the directory bld.
 </para>
-</section>
-<section>
+</sect1>
+<sect1>
 <title>Generating the source tarball</title>
 <para>
 If you have build the code as described above, you can generate the
@@ -866,8 +872,8 @@ files that make it easier to generate
 package for third-party distribution.  This includes the configure
 script, the makefiles, and the HTML/PDF documentation.
 </para>
-</section>
-<section>
+</sect1>
+<sect1>
 <title>Generating the rpm package</title>
 <para>
 The specification file to build a rpm for redhat linux is included in the
@@ -886,7 +892,7 @@ however, these instructions will fail.
 <para>
 Make sure there is a line of the form
 <programlisting>
-%packager     Joe Blow  &lt;joe@blow.com&gt;
+%packager     Joe Blow  &lt;joe@blow.com>
 </programlisting>
 In your ~/.rpmmacros file.  It is used to put the name and email address
 of the individual generating the rpm package into the file.  Be sure to
@@ -913,8 +919,8 @@ rpmbuild -ba lifelines.spec
 The mkdir commands only need to be executed if needed.
 If everything goes ok, this will generate a source and binary rpm.
 </para>
-</section>
-<section>
+</sect1>
+<sect1>
 <title>Making a release</title>
 <para>
 To release a new version, run the build/setversions.sh script
@@ -929,13 +935,13 @@ Tag the git source via (for example, for version X.Y.Z)
 </programlisting>
 Finally, Send an announcement to the LINES-L mailing list
 </para>
-</section>
-<section>
+</sect1>
+<sect1>
 <title>Putting a release on github</title>
 <para>
 This process is still being developed.
 </para>
-</section>
+</sect1>
 
 </chapter>
 </book>

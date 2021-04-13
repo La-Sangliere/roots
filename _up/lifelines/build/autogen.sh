@@ -2,6 +2,8 @@
 
 # autogen.sh - handy script to run all GNU autotools 
 
+INCLUDE="-I build/autotools -I build/gettext"
+
 # Determine root of repository
 if [ ! -f configure.ac ]
 then
@@ -28,7 +30,7 @@ rm -f configure
 rm -f stamp-h1
 
 echo "Running autoreconf..."
-echo "(This replaces aclocal, autoheader, automake, autoconf, and autopoint)"
-autoreconf -i
+echo "(This replaces aclocal, autoheader, automake, autoconf, and others)"
+autoreconf $INCLUDE -i
 
 cd $SAVEDIR

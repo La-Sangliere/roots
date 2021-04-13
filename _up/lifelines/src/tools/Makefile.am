@@ -4,22 +4,17 @@
 # AUTOMAKE_OPTIONS = no-dependencies
 
 # what are we going to build?
-bin_PROGRAMS = btedit dbverify lltest
+bin_PROGRAMS = btedit dbverify
 
-# what goes into btedit, dbverify and lltest?
+# what goes into btedit and dbverify?
 btedit_SOURCES = btedit.c wprintf.c
 dbverify_SOURCES = dbverify.c wprintf.c
-lltest_SOURCES = lltest.c wprintf.c
 
-# what libraries do btedit, dbverify and lltest need?
+# what libraries to btedit and dbverify need?
 btedit_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a \
 	@LIBINTL@ @LIBICONV@
-
 dbverify_LDADD = ../gedlib/libgedcom.a ../btree/libbtree.a \
 	../stdlib/libstdlib.a ../arch/libarch.a \
-	@LIBINTL@ @LIBICONV@
-
-lltest_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a \
 	@LIBINTL@ @LIBICONV@
 
 # 2002.06.29 Perry commented these out -- we don't need them I think
@@ -34,9 +29,11 @@ lltest_LDADD = ../btree/libbtree.a ../stdlib/libstdlib.a \
 #	$(LINK) $(dbverify_LDFLAGS) $(dbverify_OBJECTS) $(dbverify_LDADD)
 
 # $(top_builddir)        for config.h
+# $(top_srcdir)/intl     for intl headers
+# $(top_builddir)/intl             for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
 
-AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/src/hdrs
+AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
 # Locale stuff for gettext
 DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
@@ -57,4 +54,3 @@ DEFS = -DLOCALEDIR=\"$(localedir)\" @DEFS@
 # since we're not doing dependencies automagically...
 btedit.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h
 dbverify.o: ../hdrs/standard.h ../hdrs/btree.h ../hdrs/gedcom.h
-lltest.o: ../hdrs/standard.h ../hdrs/mystring.h ../hdrs/btree.h

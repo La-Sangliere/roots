@@ -129,7 +129,7 @@ traverse_index (BTREE btree, INDEX index, RKEY lo, RKEY hi, TRAV_RECORD_FUNC_BYK
 {
 	INDEX index1;
 	BLOCK block1;
-	INT i, n, ilo;
+	SHORT i, n, ilo;
 	FKEY nfkey;
 	FKEY nfkeyme = ixself(index);
 

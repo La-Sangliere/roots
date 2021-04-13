@@ -12,9 +12,11 @@ libinterp_a_SOURCES = alloc.c builtin.c builtin_list.c eval.c \
 	symtab.c write.c yacc.y
 
 # $(top_builddir)        for config.h
+# $(top_srcdir)/intl     for intl headers
+# $(top_builddir)/intl   for generated libintl.h
 # $(top_srcdir)/src/hdrs for headers
 
-AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/src/hdrs
+AM_CPPFLAGS=-I$(top_builddir) -I$(top_srcdir)/intl -I$(top_builddir)/intl -I$(top_srcdir)/src/hdrs
 
 AM_YFLAGS = -d
 
@@ -22,7 +24,7 @@ AM_YFLAGS = -d
 # The CFLAGS below is gcc specific.  Sorry. -marc
 AM_CFLAGS=-g -W -Wall -Wcast-align -Wmissing-declarations -Wmissing-prototypes -Wreturn-type -Wstrict-prototypes -pedantic -g
 
-EXTRA_DIST = yacc.h yacc.c interpi.h rptui.h
+EXTRA_DIST = yacc.h yacc.c interpi.h parse.h rptui.h
 
-lex.o: yacc.h
-interp.o: yacc.h
+lex.o: yacc.h parse.h
+

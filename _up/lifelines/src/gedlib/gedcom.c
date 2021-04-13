@@ -224,16 +224,14 @@ othr_to_othr (NODE oth)
 BOOLEAN
 node_to_nkey (NODE node, NKEY * nkey)
 {
-	char keynum[MAXKEYWIDTH];
 	nkey_clear(nkey);
 	if (!node) {
 		*nkey = nkey_zero();
 		return FALSE;
 	}
 	strcpy(nkey->key, node_to_key(node));
-	strcpy(keynum,&nkey->key[1]);
 	nkey->ntype = nkey->key[0];
-	nkey->keynum = atoi(keynum);
+	sscanf(&nkey->key[1], "%ld", &nkey->keynum);
 	return TRUE;
 }
 /*==================================================

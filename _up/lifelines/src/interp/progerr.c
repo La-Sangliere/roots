@@ -21,6 +21,7 @@
 #include "feedback.h"
 #include "arch.h"
 #include "lloptions.h"
+#include "parse.h"
 #include "zstr.h"
 #include "icvt.h"
 #include "date.h"
@@ -566,7 +567,7 @@ vprog_error (PNODE node, STRING fmt, va_list args)
 				get_current_lldate(&creation);
 				fprintf(fp, "\n%s\n", creation.datestr);
 			}
-			fprintf(fp, "%s", zs_str(zstr));
+			fprintf(fp, zs_str(zstr));
 			fprintf(fp, "\n");
 			fclose(fp);
 		}
