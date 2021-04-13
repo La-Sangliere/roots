@@ -1,2 +1,6 @@
 # roots
-A command line genealogy program forked from Tom Wetmore's LifeLines 
+
+A command line genealogy program forked from Tom Wetmore's LifeLines
+
+Recently upgraded to v3.1.1 (Cf branch up-lifelines)
+
